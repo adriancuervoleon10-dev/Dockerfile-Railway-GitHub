@@ -5,13 +5,13 @@
     "dockerfilePath": "Dockerfile"
   },
   "deploy": {
-    "startCommand": "/usr/local/bin/entrypoint.sh",
+    "startCommand": "apache2-foreground",
     "restartPolicyType": "ON_FAILURE",
     "numReplicas": 1,
     "sleepApplication": false
   },
   "service": {
-    "tcpProxyPort": 8080,
+    "tcpProxyPort": 80,
     "healthCheckPath": "/",
     "healthCheckTimeout": 100
   }
