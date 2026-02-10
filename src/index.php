@@ -1,33 +1,40 @@
 <?php
-/**
- * Configuración de conexión con tus datos reales de Railway
- */
-$host     = getenv('MYSQLHOST')     ?: 'gondola.proxy.rlwy.net';
-$user     = getenv('MYSQLUSER')     ?: 'root';
-$pass     = getenv('MYSQLPASSWORD') ?: 'ziaevCILhmRNTipUPoVVHtNNuOZQgNLm';
-$dbname   = getenv('MYSQLDATABASE') ?: 'railway';
-$port     = getenv('MYSQLPORT')     ?: '57710';
+// 1. Configuración de la nueva base de datos de Railway
+$host     = 'hopper.proxy.rlwy.net';
+$port     = '19769';
+$db       = 'railway';
+$user     = 'root';
+$password = 'ouLFOOHGUdtgUNbJjpiXRgedVcNcTHKW';
+$charset  = 'utf8mb4';
+
+// 2. Creación del DSN (Data Source Name)
+$dsn = "mysql:host=$host;port=$port;dbname=$db;charset=$charset";
+$options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+];
 
 try {
-    // Configuración DSN para MySQL
-    $dsn = "mysql:host=$host;dbname=$dbname;port=$port;charset=utf8mb4";
-    $options = [
-        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES   => false,
-    ];
-
-    $pdo = new PDO($dsn, $user, $pass, $options);
-
-    // Consulta de productos
-    $stmt = $pdo->query("SELECT p.id, p.nombre, p.precio, p.stock, c.nombre as categoria 
-                         FROM productos p 
-                         LEFT JOIN categorias c ON p.categoria_id = c.id");
-    $productos = $stmt->fetchAll();
+    // 3. Intento de conexión
+    $pdo = new PDO($dsn, $user, $password, $options);
+    
+    // Si la conexión es exitosa, puedes quitar este comentario o usarlo para probar
+    // echo "Conexión establecida con éxito a MySQL en Railway";
 
 } catch (\PDOException $e) {
-    $error = $e->getMessage();
+    // 4. En caso de error, lo muestra en pantalla (útil para el despliegue inicial)
+    die("Error crítico de conexión: " . $e->getMessage());
 }
+
+// --- A partir de aquí va el resto de tu código de la aplicación ---
+// Ejemplo de consulta para probar:
+/*
+$stmt = $pdo->query('SELECT * FROM tu_tabla');
+while ($row = $stmt->fetch()) {
+    echo $row['nombre'] . "<br>";
+}
+*/
 ?>
 
 <!DOCTYPE html>
