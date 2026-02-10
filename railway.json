@@ -1,0 +1,19 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "build": {
+    "builder": "DOCKERFILE",
+    "dockerfilePath": "Dockerfile"
+  },
+  "deploy": {
+    "startCommand": "/usr/local/bin/entrypoint.sh",
+    "restartPolicyType": "ON_FAILURE",
+    "numReplicas": 1,
+    "sleepApplication": false
+  },
+  "service": {
+    // Railway detectará el puerto 8080 configurado en tu Dockerfile
+    "tcpProxyPort": 8080,
+    "healthCheckPath": "/",
+    "healthCheckTimeout": 100
+  }
+}
