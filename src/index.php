@@ -1,10 +1,10 @@
 <?php
 // 1. Configuración
-$host     = 'hopper.proxy.rlwy.net';
-$port     = '19769';
-$db       = 'railway';
-$user     = 'root';
-$password = 'ouLFOOHGUdtgUNbJjpiXRgedVcNcTHKW';
+$host     = $_ENV['MYSQLHOST'] ?? 'hopper.proxy.rlwy.net';
+$port     = $_ENV['MYSQLPORT'] ?? '19769';
+$db       = $_ENV['MYSQLDATABASE'] ?? 'railway';
+$user     = $_ENV['MYSQLUSER'] ?? 'root';
+$password = $_ENV['MYSQLPASSWORD'] ?? 'ouLFOOHGUdtgUNbJjpiXRgedVcNcTHKW';
 $charset  = 'utf8mb4';
 
 $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=$charset";
