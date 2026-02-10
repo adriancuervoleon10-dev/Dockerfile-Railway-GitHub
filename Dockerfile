@@ -1,27 +1,23 @@
 FROM php:8.2-apache
 
-# 1. Eliminamos cualquier rastro de otros módulos MPM para evitar conflictos
+# 1. Limpieza de módulos MPM para evitar conflictos
 RUN rm -f /etc/apache2/mods-enabled/mpm_event.load /etc/apache2/mods-enabled/mpm_worker.load
-
-# 2. Desactivamos mpm_event y activamos mpm_prefork
 RUN a2dismod mpm_event || true && a2enmod mpm_prefork
 
-# 3. Instalamos las extensiones para MySQL
+# 2. Instalación de extensiones
 RUN docker-php-ext-install pdo pdo_mysql
 
-# 4. MODIFICACIÓN CLAVE PARA RAILWAY:
-# Cambiamos el puerto 80 por la variable de entorno ${PORT} en toda la configuración de Apache
+# 3. CONFIGURACIÓN DEL PUERTO (Corregida)
+# Cambiamos el puerto en los archivos de configuración de Apache
 RUN sed -i 's/80/${PORT}/g' /etc/apache2/sites-available/000-default.conf /etc/apache2/ports.conf
 
-# 5. Copiamos el contenido de tu carpeta src
+# 4. Copiamos tus archivos
 COPY src/ /var/www/html/
 
-# 6. Permisos correctos
+# 5. Permisos
 RUN chown -R www-data:www-data /var/www/html
 
-# 7. IMPORTANTE: En Railway no fijamos el puerto en 80. 
-# Dejamos que use la variable dinámica.
-EXPOSE ${PORT}
-
-# 8. Iniciamos Apache
-CMD ["apache2-foreground"]80
+# 6. INICIO (Forma recomendada para evitar errores de sintaxis)
+# Usamos el puerto 80 como valor por defecto, pero Railway lo sobrescribirá
+ENV PORT=80
+ENTRYPOINT ["apache2-foreground"]
