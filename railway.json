@@ -11,7 +11,6 @@
     "sleepApplication": false
   },
   "service": {
-    // Railway detectará el puerto 8080 configurado en tu Dockerfile
     "tcpProxyPort": 8080,
     "healthCheckPath": "/",
     "healthCheckTimeout": 100
