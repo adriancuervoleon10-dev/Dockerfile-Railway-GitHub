@@ -1,5 +1,8 @@
 FROM php:8.2-apache
 
+# 1. Eliminamos cualquier rastro de otros módulos MPM
+RUN rm -f /etc/apache2/mods-enabled/mpm_event.load /etc/apache2/mods-enabled/mpm_worker.load
+
 # Desactivamos el módulo mpm_event y activamos mpm_prefork para evitar el error de "More than one MPM loaded"
 RUN a2dismod mpm_event || true && a2enmod mpm_prefork
 
