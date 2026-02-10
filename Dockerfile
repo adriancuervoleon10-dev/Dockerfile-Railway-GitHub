@@ -17,7 +17,7 @@ RUN a2dismod mpm_event mpm_worker || true && \
 COPY src/ /var/www/html/
 RUN chown -R www-data:www-data /var/www/html
 
-# 5. ✅ ENTRYPPOINT NUEVO (fix definitivo MPM en runtime)
+# 5. ENTRYPPOINT NUEVO (fix definitivo MPM en runtime)
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
