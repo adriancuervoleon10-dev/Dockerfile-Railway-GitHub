@@ -19,7 +19,7 @@ RUN a2enmod rewrite
 # 5. Copiar el código fuente y las bases de datos antiguas (si las vas a migrar)
 COPY src/ /var/www/html/
 # Si necesitas los archivos .mdb para referencia, los copiamos también
-COPY BasesDeDatos/ /var/www/html/BasesDeDatos/
+COPY sql/ /var/www/html/sql/
 
 # 6. Permisos de carpetas
 RUN chown -R www-data:www-data /var/www/html
