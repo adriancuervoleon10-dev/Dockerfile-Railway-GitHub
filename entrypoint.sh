@@ -8,14 +8,15 @@ a2enmod mpm_prefork
 # Fix ServerName
 echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# FIX PUERTO RAILWAY (MÉTODO SEGURO - sin sed destructivo)
+# FIX PUERTO RAILWAY (SOLO limpia duplicados)
 PORT=${PORT:-8080}
 echo "Configurando Apache para puerto $PORT"
 
-# MÉTODO 1: Puerto directo en apache2.conf (más seguro)
+# LIMPIAR duplicados Listen (SOLUCIoN)
+sed -i '/Listen [0-9]\+/d' /etc/apache2/ports.conf
 echo "Listen $PORT" >> /etc/apache2/ports.conf
 
-# MÉTODO 2: Recrear virtualhost limpio
+# Recrear VirtualHost LIMPIO
 cat > /etc/apache2/sites-available/000-default.conf << EOF
 <VirtualHost *:$PORT>
     ServerAdmin webmaster@localhost
@@ -32,13 +33,15 @@ cat > /etc/apache2/sites-available/000-default.conf << EOF
 </VirtualHost>
 EOF
 
-# Activar sitio
-a2ensite 000-default
+echo " Configuracion completa para puerto $PORT"
 
-echo "Configuración completa para puerto $PORT"
-
-# Test
-apache2ctl -t
+# Test CRiTICO
+if apache2ctl -t; then
+    echo "Apache config OK"
+else
+    echo "Apache config FAILED"
+    exit 1
+fi
 
 # Arranca
 exec apache2-foreground
